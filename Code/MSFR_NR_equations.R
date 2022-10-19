@@ -57,3 +57,24 @@ MSFR_goose <- function(N1,N2,N3) {
   return(AR2)
   #list("ARl"=ARl,"ARp"=ARp,"ARs"=ARs,"ARg"=ARg,"ARga"=ARga,"ARgua"=ARgua,"L"=x,"P"=y,"S"=z,"G"=a)
 }
+
+# -------------------------------------------------------
+# numerical response equations - return the number of foxes within 50 km2
+# -------------------------------------------------------
+NR_sim<- function (hr) {
+  area = 50 #spatial scale - outside or inside the goose colony
+  overlap = 0.18 # 2019: 7 HR in 52 km2 donc 7.4 km2 sans chevauchement - HR average 9.1 km2 - overlap=1-0.82
+  y = (area/(hr*(1-overlap))) * 2
+  return(y)
+}
+
+# ---------------------------------------------------------------------
+# fct to compute the decreasing of goose nest density in 28 days
+# ---------------------------------------------------------------------
+dec_goosenest_density <- function(t,state,parameters)
+ {with(as.list(c(t,state,parameters)),{  # unpack the parameters
+          dAR2 <- MSFR_goose(N1,N2,N3) * NR_sim(hr)
+          dN2 <- - N2 + ((n_max_2 - AR2)/plot_size)
+    list(c(dN2,dAR2),
+        c(N1=N1,N3=N3,n_max_2=n_max_2))
+    })}
