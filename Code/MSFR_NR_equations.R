@@ -67,7 +67,7 @@ NR_sim<- function (hr) {
   y = (area/(hr*(1-overlap))) * 2
   return(y)
 }
-
+NR_sim(10.8)
 # ---------------------------------------------------------------------
 # fct to compute the decreasing of goose nest density in 28 days
 # ---------------------------------------------------------------------
